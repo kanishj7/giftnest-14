@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GiftNest - Gifting Quiz</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fdf8f5, #f3e4dc);
+            color: #3d242a;
+            min-height: 100vh;
+        }
+
+        nav {
+            background: white;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 15px #e6d5ce;
+        }
+
+        nav h1 {
+            color: #4a2531;
+            font-size: 27px;
+        }
+
+        nav p {
+            font-size: 12px;
+            color: #8a6d74;
+            margin-top: 5px;
+        }
+
+        nav span {
+            background: #f8e5dc;
+            color: #4a2531;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
+
+        .welcome {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .welcome h2 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            color: #7d6168;
+        }
+
+        .quiz-card {
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 35px #e6d5ce;
+        }
+
+        .quiz-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .tag {
+            background: #f8e5dc;
+            color: #4a2531;
+            padding: 10px 16px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        #number {
+            color: #8a6d74;
+            font-size: 14px;
+        }
+
+        .progress {
+            background: #f3e8e2;
+            height: 9px;
+            border-radius: 20px;
+            margin: 22px 0 30px;
+            overflow: hidden;
+        }
+
+        .bar {
+            background: linear-gradient(90deg, #b56576, #4a2531);
+            height: 100%;
+            width: 0%;
+            border-radius: 20px;
+            transition: width 0.4s;
+        }
+
+        .question-area {
+            text-align: center;
+            padding: 15px 0;
+        }
+
+        .question-art {
+            width: 150px;
+            height: 110px;
+            margin: 0 auto 18px;
+            border-radius: 14px;
+            background: #fdf3ee;
+            border: 1px dashed rgba(74, 37, 49, 0.22);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px;
+        }
+
+        .question-art .emoji {
+            font-size: 46px;
+            line-height: 1;
+        }
+
+        .question-art .art-label {
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: #4a2531;
+        }
+
+        #question {
+            font-size: 23px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .option {
+            background: #fdf9f7;
+            border: 2px solid #eedcd4;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: left;
+            font-size: 15px;
+            color: #3d242a;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .option:hover {
+            background: #f9ebe4;
+            border-color: #b56576;
+            transform: translateY(-2px);
+        }
+
+        .option.selected {
+            background: #f5dfd5;
+            border: 2px solid #6d3849;
+            color: #4a2531;
+            font-weight: bold;
+        }
+
+        .bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tip {
+            background: #f8ebe4;
+            padding: 13px;
+            border-radius: 10px;
+            color: #6d3849;
+            font-size: 13px;
+        }
+
+        .next {
+            background: #4a2531;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .next:hover {
+            background: #6d3849;
+            transform: translateY(-2px);
+        }
+
+        .result {
+            text-align: center;
+            padding: 35px 10px;
+        }
+
+        .result h2 {
+            color: #4a2531;
+            margin-bottom: 15px;
+        }
+
+        .result p {
+            margin: 15px;
+            color: #7d6168;
+        }
+
+        .result-icon {
+            font-size: 65px;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #8a6d74;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                padding: 18px;
+            }
+
+            .container {
+                margin: 25px auto;
+            }
+
+            .quiz-card {
+                padding: 22px;
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+            }
+
+            #question {
+                font-size: 19px;
+            }
+
+            .bottom {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .next {
+                width: 100%;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <nav>
+        <div>
+            <h1>🎁 GiftNest</h1>
+            <p>Wrap • Share • Celebrate</p>
+        </div>
+
+        <span>🏆 Gifting Quiz</span>
+    </nav>
+
+    <div class="container">
+
+        <div class="welcome">
+            <h2>Your Gifting Adventure ✨</h2>
+            <p>Test your gifting instincts and discover thoughtful ways to celebrate!</p>
+        </div>
+
+        <div class="quiz-card">
+
+            <div id="quizContent">
+
+                <div class="quiz-top">
+                    <span class="tag">🎀 Gifting Challenge</span>
+                    <p id="number"></p>
+                </div>
+
+                <div class="progress">
+                    <div class="bar" id="bar"></div>
+                </div>
+
+                <div class="question-area">
+                    <div class="question-art" id="questionArt">
+                        <span class="emoji">🎁</span>
+                        <span class="art-label">Gifting IQ</span>
+                    </div>
+                    <h2 id="question"></h2>
+                </div>
+
+                <div class="options" id="options"></div>
+
+                <div class="bottom">
+                    <div class="tip">
+                        ⭐ Tip: A handwritten note makes every gift feel truly personal!
+                    </div>
+
+                    <button type="button" class="next" onclick="nextQuestion()">
+                        Next Question →
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="result" id="result" style="display: none;">
+
+                <div class="result-icon">🏆</div>
+
+                <h2>Quiz Completed!</h2>
+
+                <p>Congratulations on completing your gifting challenge.</p>
+
+                <h2 id="finalScore"></h2>
+
+                <p>Your Gifting IQ Score</p>
+
+                <button type="button" class="next" onclick="restartQuiz()">
+                    ↻ Try Again
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer>
+        🎁 GiftNest © 2026 | Wrap. Share. Celebrate.
+    </footer>
+
+    <script>
+
+        let questions = [
+            {
+                emoji: "✍️",
+                label: "Personal Touch",
+                bg: "#fbe6d4",
+                question: "What makes a gift feel most personal and memorable?",
+                options: ["Expensive price tag", "Handwritten note & custom touch", "Large box size", "Plain plastic wrap"],
+                answer: "Handwritten note & custom touch"
+            },
+            {
+                emoji: "🪔",
+                label: "Festive Tradition",
+                bg: "#fdf3ee",
+                question: "Which gift is traditionally associated with good luck and prosperity during Indian festivals?",
+                options: ["Dry fruits & sweets hamper", "Wall clock", "Umbrella", "Empty wallet"],
+                answer: "Dry fruits & sweets hamper"
+            },
+            {
+                emoji: "🌿",
+                label: "Eco Wrapping",
+                bg: "#e3efe6",
+                question: "What is an eco-friendly alternative to glossy plastic gift wrap?",
+                options: ["Bubble wrap", "Kraft paper or fabric (Furoshiki)", "Foil sheets", "Vinyl tape"],
+                answer: "Kraft paper or fabric (Furoshiki)"
+            },
+            {
+                emoji: "🪴",
+                label: "Desk Greenery",
+                bg: "#e3efe6",
+                question: "Which indoor gift is popular for bringing greenery to a work desk?",
+                options: ["Mini succulent planter", "Large banyan sapling", "Cut grass", "Artificial moss"],
+                answer: "Mini succulent planter"
+            },
+            {
+                emoji: "🧺",
+                label: "Curated Hampers",
+                bg: "#fbe6d4",
+                question: "What is a curated gift hamper?",
+                options: [
+                    "A single unwrapped item",
+                    "A themed basket of assorted complementary gifts",
+                    "A shipping invoice",
+                    "A storage laundry bin"
+                ],
+                answer: "A themed basket of assorted complementary gifts"
+            },
+            {
+                emoji: "🕯️",
+                label: "Home & Wellness",
+                bg: "#fce8ec",
+                question: "Which scented gift is most commonly chosen for relaxation and home wellness?",
+                options: ["Soy aroma candles", "Paint thinner", "Dish soap", "Chalk sticks"],
+                answer: "Soy aroma candles"
+            },
+            {
+                emoji: "🎟️",
+                label: "Flexible Gifting",
+                bg: "#efe5dc",
+                question: "What is the best gift choice when you are unsure of the recipient's exact size or taste?",
+                options: [
+                    "A gift card or curated experience voucher",
+                    "Tailored shoes",
+                    "Prescription glasses",
+                    "Random size jacket"
+                ],
+                answer: "A gift card or curated experience voucher"
+            },
+            {
+                emoji: "☕",
+                label: "Custom Keepsakes",
+                bg: "#efe5dc",
+                question: "Which keepsake gift becomes unique by adding the recipient's name or initials?",
+                options: [
+                    "Plain cardboard box",
+                    "Engraved ceramic mug or journal",
+                    "Standard grocery bag",
+                    "Blank receipt"
+                ],
+                answer: "Engraved ceramic mug or journal"
+            },
+            {
+                emoji: "🏷️",
+                label: "Gifting Etiquette",
+                bg: "#fce8ec",
+                question: "What should you always remove before wrapping a gift for someone?",
+                options: [
+                    "The ribbon",
+                    "The price tag",
+                    "The protective box",
+                    "The greeting card"
+                ],
+                answer: "The price tag"
+            }
+        ];
+
+        let current = 0;
+        let score = 0;
+        let selected = "";
+
+        function displayQuestion() {
+            selected = "";
+
+            const item = questions[current];
+            const artBox = document.getElementById("questionArt");
+            artBox.style.background = item.bg || "#fdf3ee";
+            artBox.innerHTML = `<span class="emoji">${item.emoji}</span><span class="art-label">${item.label}</span>`;
+
+            document.getElementById("number").textContent =
+                "Question " + (current + 1) + " of " + questions.length;
+
+            document.getElementById("question").textContent =
+                item.question;
+
+            document.getElementById("bar").style.width =
+                ((current + 1) / questions.length * 100) + "%";
+
+            let options = document.getElementById("options");
+            options.innerHTML = "";
+
+            item.options.forEach(function(option) {
+                let button = document.createElement("button");
+                button.type = "button";
+                button.textContent = "✦   " + option;
+                button.className = "option";
+
+                button.onclick = function() {
+                    selected = option;
+
+                    let allButtons = document.querySelectorAll(".option");
+                    allButtons.forEach(function(btn) {
+                        btn.classList.remove("selected");
+                    });
+
+                    button.classList.add("selected");
+                };
+
+                options.appendChild(button);
+            });
+        }
+
+        function nextQuestion() {
+            if (selected === "") {
+                alert("Please select an answer!");
+                return;
+            }
+
+            if (selected === questions[current].answer) {
+                score++;
+            }
+
+            current++;
+
+            if (current < questions.length) {
+                displayQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById("quizContent").style.display = "none";
+            document.getElementById("result").style.display = "block";
+
+            document.getElementById("finalScore").textContent =
+                score + " / " + questions.length;
+        }
+
+        function restartQuiz() {
+            current = 0;
+            score = 0;
+            selected = "";
+
+            document.getElementById("result").style.display = "none";
+            document.getElementById("quizContent").style.display = "block";
+
+            displayQuestion();
+        }
+
+        displayQuestion();
+
+    </script>
+
+</body>
+
+</html>
